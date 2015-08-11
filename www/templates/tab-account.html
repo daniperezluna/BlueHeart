@@ -1,0 +1,23 @@
+<ion-view view-title="Account">
+  <ion-content>
+    <ion-list>
+    <ion-toggle  ng-model="settings.enableFriends" ng-click="conectoYleo()">
+        Enable Friends
+    </ion-toggle>
+    </ion-list>
+    <div class="list card" ng-show="flag">
+      <div class="item item-divider">Lectura de datos</div>
+      <div class="item item-body">
+        <div ng-repeat="datos in data">
+          Datos: {{datos}}
+        </div>
+      </div>
+    </div>
+    <!-- <ion-list>
+      <ion-item ng-repeat="dispositivo in encontrados track by $index" ng-show="flag" type="item-text-wrap">
+        <h2>{{dispositivo.name}}</h2>
+        <p>{{dispositivo.id}}</p>
+      </ion-item>
+    </ion-list -->>
+  </ion-content>
+</ion-view>
