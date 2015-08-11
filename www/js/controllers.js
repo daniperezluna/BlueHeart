@@ -26,16 +26,12 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
     var service_uuid = '1810';
     var characteristic_uuid = '2a35';
     var foundHeartRateMonitor = false;
-    $scope.data = [];
-    $scope.flag = 0;
 
 
     var onData = function(buffer) {
-        alert(buffer);
-        $scope.data = new Uint16Array(buffer);
-        alert($scope.data);
-        $scope.flag = 1;
-        alert("flag a 1");
+        alert("Dentro de onData "+buffer);
+        var data = new Uint16Array(buffer);
+        alert(data);
     }
 
     var failureConnect = function(reason) {
@@ -71,8 +67,6 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
     );
 
     ble.scan([service_uuid], 15, onScan, failureScan );
-
-    alert("Todo acabado");
   
 })
 
