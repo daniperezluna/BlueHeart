@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$http) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -21,6 +21,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       StatusBar.styleLightContent();
     }
   });
+
+    //Objeto con la definición de los headers del request HTTP, vamos a enviarle
+    //el JSON al servidr y vamos a recibir JSON del servidor
+    var defaultHTTPHeaders = {
+        'Conten-Type': 'application/json',
+        'Accept': 'application/json'
+    };
+
+    //Al objeto $http, le establecemos sus propiedades por defecto
+    //para que utilice los headers que definimos arriba
+    $http.defaults.headers.post = defaultHTTPHeaders;
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -82,4 +93,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
 
-});
+})
+
+.constant('URLServidor', 'http://blueheart.16mb.com/blueheart/services/');
+
+

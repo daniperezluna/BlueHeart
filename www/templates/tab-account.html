@@ -1,23 +1,30 @@
 <ion-view view-title="Account">
-  <ion-content>
-    <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends" ng-click="conectoYleo()">
-        Enable Friends
-    </ion-toggle>
-    </ion-list>
-    <div class="list card" ng-show="flag">
-      <div class="item item-divider">Lectura de datos</div>
-      <div class="item item-body">
-        <div ng-repeat="datos in data">
-          Datos: {{datos}}
-        </div>
+  <ion-content class="padding">
+    <form>
+      <div class="list">
+        <label class ="item item-input">
+          <input type="text" name="datosLeidos.sistole" ng-model="datosLeidos.sistole" placeholder="Sistole"/>
+        </label>
+        <label class ="item item-input">
+          <input type="text" name="datosLeidos.diastole" ng-model="datosLeidos.diastole" placeholder="Diastole"/>
+        </label>
+        <label class ="item item-input">
+          <input type="text" name="datosLeidos.pulso" ng-model="datosLeidos.pulso" placeholder="Pulso"/>
+        </label>
+        <label class ="item item-input">
+          <input type="text" name="datosLeidos.fecha" ng-model="datosLeidos.fecha" placeholder="Fecha"/>
+        </label>
+        <label class="item item-input">
+          <span style="text-align: center; width: 100%;">
+            <button class="button icon-left ion-android-send button-positive" ng-click="enviarDatos()">Enviar</button>
+          </span>
+        </label>
       </div>
-    </div>
-    <!-- <ion-list>
-      <ion-item ng-repeat="dispositivo in encontrados track by $index" ng-show="flag" type="item-text-wrap">
-        <h2>{{dispositivo.name}}</h2>
-        <p>{{dispositivo.id}}</p>
-      </ion-item>
-    </ion-list -->>
+    </form>
+    <ion-list>
+      <ion-toggle ng-model="cambio">
+        Datos Recibidos
+      </ion-toggle>
+    </ion-list>
   </ion-content>
 </ion-view>
