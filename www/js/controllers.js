@@ -32,6 +32,48 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
         
         envioFactory.enviarDatos($scope.datosLeidos);
     };
+
+    function semaforoTension(sistole, diastole) {
+
+        var colorT = null;
+
+        alert("dentro de semaforo-> "+sistole);
+        alert("dentro de semaforo d-> "+diastole);
+
+        if (sistole < 120 && diastole < 80){
+            return 'verde';
+        }
+        else if((sistole >= 120 && sistole < 129) && (diastole >= 80 && diastole < 84)){ 
+            return 'verdeClaro';
+        }
+        else if((sistole >= 120 && sistole < 129) || (diastole >= 80 && diastole < 84)){
+            return 'verdeClaro';
+        }
+        else if((sistole >= 130 && sistole < 139) && (diastole >= 85 && diastole < 89)){
+            return 'amarillo';
+        }
+        else if((sistole >= 130 && sistole < 139) || (diastole >= 85 && diastole < 89)){
+            return 'amarillo';
+        }
+        else if((sistole >= 140 && sistole < 159) && (diastole >= 90 && diastole < 99)){
+            return 'amarilloNaranja';
+        }
+        else if((sistole >= 140 && sistole < 159) || (diastole >= 90 && diastole < 99)){
+            return 'amarilloNaranja';
+        }
+        else if((sistole >= 160 && sistole < 179) && (diastole >= 100 && diastole < 109)){
+            return 'naranja';
+        }
+        else if((sistole >= 160 && sistole < 179) || (diastole >= 100 && diastole < 109)){
+            return 'naranja';
+        }
+        else if(sistole >= 180 && diastole >= 110){
+            return 'rojo';
+        }
+        else if(sistole >= 140 && diastole < 90){
+            return 'azul';
+        }
+    }
         
     function bytesToFloat(b0, b1) {
         var mantissa = unsignedToSigned(unsignedByteToInt(b0)
@@ -57,13 +99,23 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
 
     //Devuelve la fecha de la medición en formato h:m:s d/m/YYYY
     function obtenerFechaMedida(offset, uint8Array) {
-        var anyo = (uint8Array[offset] << 8) | uint8Array[offset+1];
+        
+        alert("byte1 "+ uint8Array[offset]);
+        alert("byte2 "+ uint8Array[offset+1]);
+
+        alert("byte cambiados "+  (uint8Array[offset+1] << 8) | uint8Array[offset]);
+
+        var anyo = (uint8Array[offset+1] << 8) | uint8Array[offset];
         var mes = uint8Array[offset+2];
         var dia = uint8Array[offset+3];
         var hora = uint8Array[offset+4];
         var minuto = uint8Array[offset+5];
+        var fechaToma = new Date(anyo,[mes-1],dia);
+
+        fechaToma = fechaToma.toDateString();
+        alert("fecha ->"+fechaToma);
         
-        return hora+":"+minuto+" "+dia+"/"+mes+"/"+anyo;
+        return fechaToma;
     }
 
     var DatosDeLecturaProcesados = function DatosDeLecturaProcesados(uint8Array) {
@@ -136,6 +188,10 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
         var lectura = new Uint8Array(buffer);
         
         $scope.datosLeidos = new DatosDeLecturaProcesados(lectura);
+
+        $scope.colorTension = semaforoTension($scope.datosLeidos.sistole,$scope.datosLeidos.diastole);
+
+        alert($scope.colorTension);
         
         alert("sístole: "+ $scope.datosLeidos.sistole);
         alert("diástole: "+ $scope.datosLeidos.diastole );

@@ -1,25 +1,80 @@
-<ion-view view-title="Account">
+<ion-view view-title="Medicio&acute;n">
   <ion-content class="padding">
     <form>
-      <div class="list">
+      <div class="big-box">
+        <div class="left-box">
+          Presión Sistólica
+        </div>
+        <div class="right-box">
+          <div class="circle-border1">
+            <div class="circle-border2">
+             {{datosLeidos.sistole}}
+            </div>
+          </div>
+          mmHg
+        </div>
+      </div>
+      <div class="big-box secondary">
+        <div class="left-box">
+          Presión Diastólica
+        </div>
+        <div class="right-box">
+          <div class="circle-border1">
+            <div class="circle-border2">
+             {{datosLeidos.diastole}}
+            </div>
+          </div>
+          mmHg
+        </div>
+      </div>
+      <div class="small-box">
+        <div class="left-box">
+          PULSO
+        </div>
+        <div class="right-box">
+          <div class="circle-border1">
+            <div class="circle-border2">
+             {{datosLeidos.pulso}}
+            </div>
+          </div>
+          mmHg
+        </div>
+      </div>
+      <div class="small-box">
+      <ul class="semaforo {{ colorTension }}">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+    <div style="clear: both;"></div>
+      <div class="small-box centered">
+        <div class="date-text">FECHA</div>
+        <div class="date"><div class="date-data">{{datosLeidos.fecha}}</div></div>
+      </div>
+      <!-- <div class="list">
         <label class ="item item-input">
-          <input type="text" name="datosLeidos.sistole" ng-model="datosLeidos.sistole" placeholder="Sistole"/>
+          <input type="text" name="datosLeidos.sistole" ng-model="datosLeidos.sistole" placeholder="Sistole" disabled/>
         </label>
         <label class ="item item-input">
-          <input type="text" name="datosLeidos.diastole" ng-model="datosLeidos.diastole" placeholder="Diastole"/>
+          <input type="text" name="datosLeidos.diastole" ng-model="datosLeidos.diastole" placeholder="Diastole" disabled/>
         </label>
         <label class ="item item-input">
-          <input type="text" name="datosLeidos.pulso" ng-model="datosLeidos.pulso" placeholder="Pulso"/>
+          <input type="text" name="datosLeidos.pulso" ng-model="datosLeidos.pulso" placeholder="Pulso" disabled/>
         </label>
         <label class ="item item-input">
-          <input type="text" name="datosLeidos.fecha" ng-model="datosLeidos.fecha" placeholder="Fecha"/>
+          <input type="text" name="datosLeidos.fecha" ng-model="datosLeidos.fecha" placeholder="Fecha" disabled/>
         </label>
         <label class="item item-input">
           <span style="text-align: center; width: 100%;">
             <button class="button icon-left ion-android-send button-positive" ng-click="enviarDatos()">Enviar</button>
           </span>
         </label>
-      </div>
+      </div> -->
     </form>
     <ion-list>
       <ion-toggle ng-model="cambio">
