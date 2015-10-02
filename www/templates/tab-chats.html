@@ -1,16 +1,61 @@
-<ion-view view-title="Chats">
+<ion-view view-title="Gráficas">
   <ion-content>
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
-
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
+    <div id="bloqueSuperior" ng-show="flag == 0">
+      <h4>Fecha Inicio</h4>
+      <ionic-datepicker input-obj="datepickerObjectPopup">
+        <button class="button button-block button-positive ion-calendar"> {{datepickerObjectPopup.inputDate | date:'dd - MM - yyyy'}}</button>
+      </ionic-datepicker>
+      <h4>Fecha Fin</h4>
+      <ionic-datepicker input-obj="datepickerObjectPopupTo">
+        <button class="button button-block button-positive ion-calendar"> {{datepickerObjectPopupTo.inputDate | date:'dd - MM - yyyy'}}</button>
+      </ionic-datepicker>
+      <button class="button button-full button-positive" ng-click="resultadoParcial(datepickerObjectPopup.inputDate,datepickerObjectPopupTo.inputDate)">Mostrar Resultados por Fecha</button>
+      <button class="button button-full button-positive" ng-click="resultadoHistorico()">Mostrar Histórico Resultados</button>
+    </div>
+    <div id="mensaje" ng-show="mensaje">
+      <h4>No hay datos para mostrar</h4>
+    </div>
+    <div id="table" ng-show="flag == 1">
+      <div class="row">
+        <div class="titulos col col-20">Sistole</div>
+        <div class="titulos col col-20">Diastole</div>
+        <div class="titulos col col-20">Pulso</div>
+        <div class="titulos col col-20">Fecha</div>
+        <div class="titulos col col-20">Nivel</div>
+      </div>
+      <div class="row" ng-repeat="datos in datosRec track by $index">
+        <div class="col col-20">{{datos.sistole}}</div>
+        <div class="col col-20">{{datos.diastole}}</div>
+        <div class="col col-20">{{datos.pulso}}</div>
+        <div class="col col-20">{{datos.fecha | date:'dd-MM-yyyy'}}</div>
+        <div class="col col-20 circle {{datos.colorTension}}"></div>
+      </div>
+      <canvas id="line" class="chart chart-line" chart-data="dataRec" chart-labels="labels" chart-legend="true" chart-series="series"></canvas> 
+    </div>
+    <div id="table" ng-show="flag == 2">
+      <div class="row">
+        <div class="titulos col col-20">Sistole</div>
+        <div class="titulos col col-20">Diastole</div>
+        <div class="titulos col col-20">Pulso</div>
+        <div class="titulos col col-20">Fecha</div>
+        <div class="titulos col col-20">Nivel</div>
+      </div>
+      <div class="row" ng-repeat="datosR in datosRepar track by $index">
+        <div class="col col-20">{{datosR.sistole}}</div>
+        <div class="col col-20">{{datosR.diastole}}</div>
+        <div class="col col-20">{{datosR.pulso}}</div>
+        <div class="col col-20">{{datosR.fecha | date:'dd-MM-yyyy'}}</div>
+        <div class="col col-20 circle {{datosR.colorTension}}"></div>
+      </div>
+      <canvas id="line2" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series"></canvas> 
+    </div>
   </ion-content>
+  <!-- align to the bottom of the page -->
+  <div style="position: absolute; bottom: 0px; width: 100%">
+      <div style="text-align: center">
+        <div class="small-box centered" ng-show="botonA">
+          <button class="button button-large button-positive ion-paper-airplane icon-right" ng-click="volverAtras()">Volver Atrás</Datos>
+        </div>      
+      </div>
+  </div>
 </ion-view>

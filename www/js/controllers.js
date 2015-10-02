@@ -2,23 +2,234 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+.controller('ChatsCtrl', function($scope, $ionicPopup, envioFactory, $timeout) {
+    
+    var monthList = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sept", "Oct", "Nov", "Dic"];
+    var weekDaysList = ['S', 'D', 'L', 'M', 'X', 'J', 'V'];
+    $scope.flag = 0;
+    $scope.mensaje = false;
+    $scope.botonA = false;
+    $scope.data = [];
+    $scope.dataRec = [];
+    $scope.labels = [];
+    $scope.series = ['Sistole', 'Diastole', 'Pulso'];
+    $scope.contador = 0;
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-}
-)
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+    $scope.datepickerObject = {};
+    $scope.datepickerObject.inputDate = new Date();
+
+    $scope.datepickerObjectTo = {};
+    $scope.datepickerObjectTo.inputDate = new Date();
+
+    $scope.datepickerObjectPopup = {
+      titleLabel: 'Escoja su fecha, no puede ser anterior a 01-01-2015', //Optional
+      todayLabel: 'Hoy', //closeLabel
+      Optional: 'Cerrar', //Optional
+      setLabel: 'OK', //Optional
+      errorMsgLabel : 'Please select time.', //Optional
+      setButtonType : 'button-assertive', //Optional
+      modalHeaderColor:'bar-positive', //Optional
+      modalFooterColor:'bar-positive', //Optional
+      templateType:'popup', //Optional
+      inputDate: $scope.datepickerObject.inputDate, //Optional
+      mondayFirst: true, //Optional
+      weekDaysList: weekDaysList,
+      monthList:monthList, //Optional
+      from: new Date(2015, 1, 1), //Optional
+      to: new Date(), //Optional
+      callback: function (val) { //Optional
+        datePickerCallbackPopup(val);
+      }
+    };
+
+    var datePickerCallbackPopup = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+      } else {
+        $scope.datepickerObjectPopup.inputDate = val;
+        console.log('Selected date is : ', val);
+      }
+    };
+
+    $scope.datepickerObjectPopupTo = {
+      titleLabel: 'Escoja su fecha, no puede ser anterior a 01-01-2015', //Optional
+      todayLabel: 'Hoy', //closeLabel
+      Optional: 'Cerrar', //Optional
+      setLabel: 'OK', //Optional
+      errorMsgLabel : 'Please select time.', //Optional
+      setButtonType : 'button-assertive', //Optional
+      modalHeaderColor:'bar-positive', //Optional
+      modalFooterColor:'bar-positive', //Optional
+      templateType:'popup', //Optional
+      inputDate: $scope.datepickerObjectTo.inputDate, //Optional
+      mondayFirst: true, //Optional
+      weekDaysList: weekDaysList,
+      monthList:monthList, //Optional
+      from: new Date(2015,1,1), //Optional
+      to: new Date(), //Optional
+      callback: function (val) { //Optional
+        datePickerCallbackPopupTo(val);
+      }
+    };
+
+    var datePickerCallbackPopupTo = function (val) {
+      if (typeof(val) === 'undefined') {
+        console.log('No date selected');
+      } else {
+        $scope.datepickerObjectPopupTo.inputDate = val;
+        console.log('Selected date is : ', val)
+      }
+    };
+
+    $scope.resultadoParcial = function (fechaInicio, fechaFin) {
+        
+        $scope.datosRepar = [];
+        $scope.labels = [];
+
+        var datosSistole = [];
+        var datosDiastole = [];
+        var datosPulso = [];
+        var datosFecha = [];
+
+        if (fechaInicio > fechaFin){
+            alert("La Fecha Fin no puede ser anterior a la Fecha Inicio");
+        } else {
+            
+            envioFactory.leerDatos()
+            .success(function (data){
+                $scope.datosRec = data.resultado;
+                $scope.flag = 2;
+                $scope.botonA = true;
+            });
+            
+            $timeout( function(){
+
+                for(var i = 0; i < $scope.datosRec.length; i++) {
+
+                    var fechaAux2 = new Date($scope.datosRec[i].fecha);
+
+                    console.log("vuelta" + i + 'de' + $scope.datosRec.length);
+                    console.log($scope.datosRec[i]);
+
+                    if(fechaAux2 >= fechaInicio && fechaAux2 <= fechaFin ) {
+                        datosSistole[i] = $scope.datosRec[i].sistole;
+                        datosDiastole[i] = $scope.datosRec[i].diastole;
+                        datosPulso[i] = $scope.datosRec[i].pulso;
+                        $scope.labels.push($scope.datosRec[i].fecha);
+                        $scope.datosRepar[i] = $scope.datosRec[i];
+
+                        console.log(i + "dat0 -> " + datosSistole[i]);
+                        console.log(i + "dat1 -> " + datosDiastole[i]);
+                        console.log(i + "dat2 -> " + datosPulso[i]);
+                        console.log(i + "dat3 -> " + $scope.labels[i]);
+                        console.log(i + "dat4 -> " + $scope.datosRepar[i]);
+                    }
+                }
+
+                console.log(datosSistole);
+
+                if(datosSistole[0] == undefined) {
+
+                for(var k = 0; k < $scope.datosRec.length; k++) {
+
+                    if(datosSistole[k] == undefined)
+                        $scope.contador++;
+
+                }
+
+                    console.log("contador -> " + $scope.contador);
+                    datosSistole.splice(0,$scope.contador);
+                    datosDiastole.splice(0,$scope.contador);
+                    datosPulso.splice(0,$scope.contador);
+
+                    $scope.data[0] = datosSistole;
+                    $scope.data[1] = datosDiastole;
+                    $scope.data[2] = datosPulso;                    
+
+                } else{
+
+                    $scope.data[0] = datosSistole;
+                    $scope.data[1] = datosDiastole;
+                    $scope.data[2] = datosPulso;
+
+                }
+
+                if($scope.data[0].length == 0) {
+                    $scope.mensaje = true;
+                }
+
+                for(var j = 0; j < $scope.data[0].length; j++) {
+                    
+                    console.log($scope.data[0][j]);
+                    console.log($scope.data[1][j]);
+                    console.log($scope.data[2][j]);
+                
+                }
+                
+                console.log($scope.labels);
+
+                console.log($scope.data[0].length);
+                console.log($scope.data[1].length);
+                console.log($scope.data[2].length);
+                console.log($scope.labels.length);
+
+            },750);
+            
+
+        }
+    };
+
+    $scope.resultadoHistorico = function () {
+        envioFactory.leerDatos()
+        .success(function (data){
+            $scope.datosRec = data.resultado;
+            $scope.flag = 1;
+            $scope.botonA = true;
+        });
+
+        $timeout( function(){
+
+            var datosSistole = [];
+            var datosDiastole = [];
+            var datosPulso = [];
+            var datosFecha = [];
+
+            for(var i = 0; i < $scope.datosRec.length; i++) {
+                datosSistole[i] = $scope.datosRec[i].sistole;
+                datosDiastole[i] = $scope.datosRec[i].diastole;
+                datosPulso[i] = $scope.datosRec[i].pulso;
+                $scope.labels.push($scope.datosRec[i].fecha);
+            }
+
+            $scope.dataRec[0] = datosSistole;
+            $scope.dataRec[1] = datosDiastole;
+            $scope.dataRec[2] = datosPulso;
+
+            if($scope.dataRec[0].length == 0) {
+                $scope.mensaje = true;
+            }
+
+        },500);
+
+    };
+
+    $scope.volverAtras = function () {
+
+        $scope.flag = 0;
+        $scope.mensaje = false;
+        $scope.botonA = false;
+        $scope.data = [];
+        $scope.labels = [];
+        $scope.datosRec = [];
+        $scope.dataRec = [];
+        $scope.datosRepar = [];
+
+        $scope.datepickerObject = {};
+        $scope.datepickerObjectTo = {};
+
+        $scope.datepickerObjectPopup.inputDate = new Date();
+        $scope.datepickerObjectPopupTo.inputDate = new Date();
+    };
 })
 
 .controller('AccountCtrl', function($ionicPlatform, $ionicPopup,$scope,$cordovaBLE,$timeout,$http,$sce,envioFactory) {
@@ -29,7 +240,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
     $scope.datosLeidos = null;
 
     $scope.enviarDatos = function () {
-        
+        console.log($scope.datosLeidos);
         envioFactory.enviarDatos($scope.datosLeidos);
     };
 
@@ -110,9 +321,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
         var dia = uint8Array[offset+3];
         var hora = uint8Array[offset+4];
         var minuto = uint8Array[offset+5];
-        var fechaToma = new Date(anyo,[mes-1],dia);
+        var fechaToma = new Date(anyo+'-'+[mes]+'-'+dia);
 
-        fechaToma = fechaToma.toDateString();
         alert("fecha ->"+fechaToma);
         
         return fechaToma;
@@ -151,6 +361,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
         this.sistole = bytesToFloat(uint8Array[offset], uint8Array[offset+1]);
         this.diastole = bytesToFloat(uint8Array[offset+2], uint8Array[offset+3]);
         this.presionMedia = bytesToFloat(uint8Array[offset+4], uint8Array[offset+5]);
+        this.colorTension = semaforoTension(this.sistole,this.diastole);
         
         offset += 6;
         
@@ -189,9 +400,9 @@ angular.module('starter.controllers', ['ionic', 'ngCordova'])
         
         $scope.datosLeidos = new DatosDeLecturaProcesados(lectura);
 
-        $scope.colorTension = semaforoTension($scope.datosLeidos.sistole,$scope.datosLeidos.diastole);
+        // $scope.datosLeidos.colorTension = semaforoTension($scope.datosLeidos.sistole,$scope.datosLeidos.diastole);
 
-        alert($scope.colorTension);
+        alert($scope.datosLeidos.colorTension);
         
         alert("sístole: "+ $scope.datosLeidos.sistole);
         alert("diástole: "+ $scope.datosLeidos.diastole );

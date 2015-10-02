@@ -37,10 +37,32 @@ body{max-width: 480px;overflow: hidden;}
 ul.semaforo {position: relative;width: auto; /* para 5 (ancho li x nº de círculos total) */margin: 10px auto;padding: 0;list-style-type: none;}
 ul.semaforo li {position: relative;display: block;float: left;width: 20px; /* ancho de cada círculo */height: 20px;border-radius: 50%;background: lightgrey;}
 
-.verde li:nth-of-type(1) {background:#51A87D;}
-.verdeClaro li:nth-of-type(2) {background: #D4FFD4;}
-.amarillo li:nth-of-type(3) {background: #FFFF25;}
-.amarilloNaranja li:nth-of-type(4) {background: #FFD425;}
-.naranja li:nth-of-type(5) {background: #FFA823;}
-.rojo li:nth-of-type(6) {background: #FF2524;}
-.azul li:nth-of-type(7) {background: #A9D4FF;}
+.verde,.verde li:nth-of-type(1) {background:#51A87D;}
+.verdeClaro, .verdeClaro li:nth-of-type(2) {background: #D4FFD4;}
+.amarillo, .amarillo li:nth-of-type(3) {background: #FFFF25;}
+.amarilloNaranja, .amarilloNaranja li:nth-of-type(4) {background: #FFD425;}
+.naranja, .naranja li:nth-of-type(5) {background: #FFA823;}
+.rojo, .rojo li:nth-of-type(6) {background: #FF2524;}
+.azul, .azul li:nth-of-type(7) {background: #A9D4FF;}
+.white {background: #FFFFFF;}
+
+
+.titulos{
+	font-size:15px !important; font-weight: bold;
+}
+
+.col {
+	font-size: 11px; font-weight: bold; text-align: center; 
+}
+
+/*.col:last-child {
+    border-right: solid 1px grey;
+}
+
+.row:last-child .col {
+    border-bottom: solid 1px grey;
+}*/
+
+.circle {
+	position: relative; top: 9px; width: 15px; max-width: 15px; height: 15px; display: block; border-radius: 50px; margin: 0 auto;
+}
